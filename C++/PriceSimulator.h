@@ -1,0 +1,9 @@
+
+class PriceSimulator
+{
+    public:
+    
+
+    private:
+    
+};
