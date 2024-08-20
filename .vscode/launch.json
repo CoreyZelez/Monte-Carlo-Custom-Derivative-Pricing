@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Test",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/Backend/test.exe", // Path to your executable
+            "args": [], // Arguments for your test, if any
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/Backend",
+            "environment": [],
+            "externalConsole": true,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ],
+            "preLaunchTask": "build", // Optional: If you have a build task
+            "miDebuggerPath": "/usr/bin/gdb", // Adjust if necessary
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}

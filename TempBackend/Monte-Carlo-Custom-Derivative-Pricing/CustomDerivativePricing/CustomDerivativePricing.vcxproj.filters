@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\Derivatives">
+      <UniqueIdentifier>{131c5c48-85d8-45ec-b4bb-8a602f6fec0d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Derivatives">
+      <UniqueIdentifier>{77412dd2-5365-49de-8864-2e11767f7b12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Asset Model">
+      <UniqueIdentifier>{8563fcaa-8010-427f-8be2-d0ada5544b91}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Asset Model">
+      <UniqueIdentifier>{8707e006-aedc-4590-9702-cf0dbc6cedde}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="framework.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CustomDerivativePricing.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetDerivative.h">
+      <Filter>Header Files\Derivatives</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetModel.h">
+      <Filter>Header Files\Asset Model</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetModelFactor.h">
+      <Filter>Header Files\Asset Model</Filter>
+    </ClInclude>
+    <ClInclude Include="VanillaOption.h">
+      <Filter>Header Files\Derivatives</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetPriceSimulator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetModelEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CustomDerivativePricing.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetDerivative.cpp">
+      <Filter>Source Files\Derivatives</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetModel.cpp">
+      <Filter>Source Files\Asset Model</Filter>
+    </ClCompile>
+    <ClCompile Include="VanillaOption.cpp">
+      <Filter>Source Files\Derivatives</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetPriceSimulator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetModelEvent.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
