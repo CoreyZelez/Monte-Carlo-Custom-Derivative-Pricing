@@ -2,7 +2,7 @@
 #include <memory>
 #include <vector>
 
-class AssetModelEvent;
+class AssetEvent;
 
 /// @brief Factor of asset model affecting price, volatility, or expected return.
 class AssetModelFactor
@@ -15,7 +15,7 @@ public:
     /// @brief Adjusts the expected return of the asset.
     /// @param day The current day being simulated for the asset price model.
     /// @param scheduledEvents The current upcoming scheduled events for the price.
-    virtual void addScheduledEvents(int day, std::vector<AssetModelEvent> &scheduledEvents) = 0;
+    virtual void addScheduledEvents(int day, std::vector<AssetEvent> &scheduledEvents) = 0;
 
     /// @brief Adjusts the expected return of the asset.
     /// @param day The current day being simulated for the asset price model.

@@ -54,7 +54,10 @@
     <ClInclude Include="AssetPriceSimulator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssetModelEvent.h">
+    <ClInclude Include="AssetEvent.h">
+      <Filter>Header Files\Asset Model</Filter>
+    </ClInclude>
+    <ClInclude Include="FixedDividendFactor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,7 +83,10 @@
     <ClCompile Include="AssetPriceSimulator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AssetModelEvent.cpp">
+    <ClCompile Include="AssetEvent.cpp">
+      <Filter>Source Files\Asset Model</Filter>
+    </ClCompile>
+    <ClCompile Include="FixedDividendFactor.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -106,6 +106,7 @@ void AssetModel::advanceDayVolatility()
 
 void AssetModel::advancePrice()
 {
+    // Price change due to model based on Itô process.
     const double dailyExpectedReturn = expectedReturn / numTradingDays;  // Continuously compounded.
     price = (price * exp(dailyExpectedReturn)) + (price * dayVolatility * normalDist(gen));
 

@@ -1,6 +1,6 @@
 #pragma once
 #include "AssetModelFactor.h"
-#include "AssetModelEvent.h"
+#include "AssetEvent.h"
 #include <vector>
 #include <memory>
 #include <random>
@@ -32,7 +32,7 @@ private:
     const int numTradingDays = 252;
 
     std::vector<std::unique_ptr<AssetModelFactor>> factors;  // Custom factors influencing price, expected return, and volatility.
-    std::vector<AssetModelEvent> scheduledEvents;  // Upcoming events known to investor.
+    std::vector<AssetEvent> scheduledEvents;  // Upcoming events known to investor.
 
     std::mt19937 gen;
     std::normal_distribution<double> normalDist;
