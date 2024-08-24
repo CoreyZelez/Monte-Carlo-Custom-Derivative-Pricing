@@ -2,6 +2,8 @@
 #include "AssetModel.cpp"
 #include "AssetPriceSimulator.h"
 #include "AssetPriceSimulator.cpp"
+#include "FixedDividendFactor.h"
+#include "FixedDividendFactor.cpp"
 #include <iostream>
 
 int main()
@@ -10,6 +12,7 @@ int main()
     assetModel.setPrice(50);
     assetModel.setExpectedReturn(0.1);
     assetModel.setVolatility(0.2);
+    assetModel.addFactor(FixedDividendFactor(10, 30, 10));
     AssetPriceSimulator simulator(assetModel);
 
     simulator.runSimulations(8, 400000, 600);

@@ -27,14 +27,24 @@ AssetModel::AssetModel(const AssetModel& other)
     }
 }
 
+void AssetModel::addFactor(const AssetModelFactor& factor)
+{
+    factors.push_back(factor.clone());
+}
+
+void AssetModel::initData()
+{
+    advanceData();
+}
+
 void AssetModel::advance()
 {
     ++day;
-    advanceScheduledEvents();
     advanceExpectedReturn();
     advanceVolatility();
     advanceDayVolatility();
     advancePrice();
+    advanceData();
 }
 
 void AssetModel::setPrice(double price)
@@ -56,26 +66,25 @@ void AssetModel::setVolatility(double volatility)
     assert(day == 0);
 
     this->volatility = volatility;
+    dayVolatility = volatility / sqrt(numTradingDays);
 }
 
-double AssetModel::getPrice() const
+std::map<std::string, std::any> AssetModel::getData() const
 {
-    return price;
+    return data;
 }
 
-double AssetModel::getExpectedReturn() const
+void AssetModel::advanceData() 
 {
-    return expectedReturn;
-}
+    data.clear();
+    data["Asset_Price"] = price;
+    data["Volatility"] = volatility;
+    data["Day_Volatility"] = dayVolatility;
 
-double AssetModel::getVolatility() const
-{
-    return volatility;
-}
-
-double AssetModel::getDayVolatility() const
-{
-    return dayVolatility;
+    for(const auto &factor : factors)
+    {
+        factor.get()->addData(day, data);
+    }
 }
 
 void AssetModel::advanceExpectedReturn()
@@ -113,25 +122,5 @@ void AssetModel::advancePrice()
     for(auto& factor : factors)
     {
         factor.get()->adjustPrice(day, price);
-    }
-}
-
-void AssetModel::advanceScheduledEvents()
-{
-    for(auto& factor : factors)
-    {
-        factor.get()->addScheduledEvents(day, scheduledEvents);
-    }
-
-    for(auto iter = scheduledEvents.begin(); iter != scheduledEvents.end();)
-    {
-        if(iter->day < day)
-        {
-            iter = scheduledEvents.erase(iter);
-        }
-        else
-        {
-            ++iter;
-        }
     }
 }

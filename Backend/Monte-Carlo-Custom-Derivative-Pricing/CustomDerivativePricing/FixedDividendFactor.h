@@ -7,13 +7,13 @@ class FixedDividendFactor : public AssetModelFactor
 public:
     FixedDividendFactor(int announcementDay, int paymentDay, double dividendAmount);
 
-    virtual std::unique_ptr<AssetModelFactor> clone() const;
+    virtual std::unique_ptr<AssetModelFactor> clone() const override;
 
-    virtual void addScheduledEvents(int day, std::vector<AssetEvent>& scheduledEvents);
-    virtual void adjustExpectedReturn(int day, double& expectedReturn);
-    virtual void adjustVolatility(int day, double& volatility);
-    virtual void adjustDayVolatility(int day, double& dayVolatility);
-    virtual void adjustPrice(int day, double& price);
+    virtual void addData(int day, std::map<std::string, std::any>& data) override;
+    virtual void adjustExpectedReturn(int day, double& expectedReturn) override;
+    virtual void adjustVolatility(int day, double& volatility) override;
+    virtual void adjustDayVolatility(int day, double& dayVolatility) override;
+    virtual void adjustPrice(int day, double& price) override;
 private:
     int announcementDay;
     int paymentDay;

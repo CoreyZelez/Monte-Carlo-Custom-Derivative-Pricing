@@ -1,15 +1,27 @@
 #pragma once
 #include "AssetModelFactor.h"
-#include "AssetEvent.h"
 #include <vector>
+#include <any>
+#include <map>
 #include <memory>
 #include <random>
 
-class AssetModel
+#ifdef CUSTOM_DERIVATIVE_PRICING_API_EXPORTS
+#define CUSTOM_DERIVATIVE_PRICING_API __declspec(dllexport)
+#else
+#define CUSTOM_DERIVATIVE_PRICING_API __declspec(dllimport)
+#endif
+
+class CUSTOM_DERIVATIVE_PRICING_API AssetModel
 {
 public:
     AssetModel();
     AssetModel(const AssetModel& other);
+
+    void addFactor(const AssetModelFactor& factor);
+
+    /// @brief Sets data for day 0.
+    void initData();
 
     /// @brief Advances the asset model by a day.
     void advance();
@@ -18,10 +30,7 @@ public:
     void setExpectedReturn(double expectedReturn);
     void setVolatility(double volatility);
 
-    double getPrice() const;
-    double getExpectedReturn() const;
-    double getVolatility() const;
-    double getDayVolatility() const;
+    std::map<std::string, std::any> getData() const;
 
 private:
     int day = 0;  // Current day of model.
@@ -32,7 +41,8 @@ private:
     const int numTradingDays = 252;
 
     std::vector<std::unique_ptr<AssetModelFactor>> factors;  // Custom factors influencing price, expected return, and volatility.
-    std::vector<AssetEvent> scheduledEvents;  // Upcoming events known to investor.
+
+    std::map<std::string, std::any> data;
 
     std::mt19937 gen;
     std::normal_distribution<double> normalDist;
@@ -41,6 +51,6 @@ private:
     void advanceVolatility();
     void advanceDayVolatility();
     void advancePrice();
-    void advanceScheduledEvents();
+    void advanceData();
 };
 

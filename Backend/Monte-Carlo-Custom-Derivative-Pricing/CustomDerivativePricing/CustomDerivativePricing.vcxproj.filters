@@ -51,14 +51,11 @@
     <ClInclude Include="VanillaOption.h">
       <Filter>Header Files\Derivatives</Filter>
     </ClInclude>
-    <ClInclude Include="AssetPriceSimulator.h">
+    <ClInclude Include="DerivativeSimulator.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AssetEvent.h">
-      <Filter>Header Files\Asset Model</Filter>
     </ClInclude>
     <ClInclude Include="FixedDividendFactor.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Asset Model</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -80,14 +77,11 @@
     <ClCompile Include="VanillaOption.cpp">
       <Filter>Source Files\Derivatives</Filter>
     </ClCompile>
-    <ClCompile Include="AssetPriceSimulator.cpp">
+    <ClCompile Include="DerivativeSimulator.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetEvent.cpp">
-      <Filter>Source Files\Asset Model</Filter>
     </ClCompile>
     <ClCompile Include="FixedDividendFactor.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Asset Model</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

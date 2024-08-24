@@ -120,7 +120,7 @@
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;CUSTOMDERIVATIVEPRICING_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;CUSTOM_DERIVATIVE_PRICING_API_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
@@ -159,8 +159,7 @@
     <ClInclude Include="AssetDerivative.h" />
     <ClInclude Include="AssetModel.h" />
     <ClInclude Include="AssetModelFactor.h" />
-    <ClInclude Include="AssetEvent.h" />
-    <ClInclude Include="AssetPriceSimulator.h" />
+    <ClInclude Include="DerivativeSimulator.h" />
     <ClInclude Include="CustomDerivativePricing.h" />
     <ClInclude Include="FixedDividendFactor.h" />
     <ClInclude Include="framework.h" />
@@ -170,8 +169,7 @@
   <ItemGroup>
     <ClCompile Include="AssetDerivative.cpp" />
     <ClCompile Include="AssetModel.cpp" />
-    <ClCompile Include="AssetEvent.cpp" />
-    <ClCompile Include="AssetPriceSimulator.cpp" />
+    <ClCompile Include="DerivativeSimulator.cpp" />
     <ClCompile Include="CustomDerivativePricing.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FixedDividendFactor.cpp" />

@@ -7,10 +7,10 @@
 
 
 // This is an example of an exported variable
-CUSTOMDERIVATIVEPRICING_API int nCustomDerivativePricing=0;
+CUSTOM_DERIVATIVE_PRICING_API int nCustomDerivativePricing=0;
 
 // This is an example of an exported function.
-CUSTOMDERIVATIVEPRICING_API int fnCustomDerivativePricing(void)
+CUSTOM_DERIVATIVE_PRICING_API int fnCustomDerivativePricing(void)
 {
     return 0;
 }

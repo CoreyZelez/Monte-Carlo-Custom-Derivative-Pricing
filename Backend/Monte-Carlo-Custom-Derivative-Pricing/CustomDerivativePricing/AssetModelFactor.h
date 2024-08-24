@@ -1,8 +1,11 @@
 #pragma once
 #include <memory>
+#include <map>
+#include <string>
 #include <vector>
+#include <any>
 
-class AssetEvent;
+struct AssetEvent;
 
 /// @brief Factor of asset model affecting price, volatility, or expected return.
 class AssetModelFactor
@@ -12,10 +15,10 @@ public:
     /// @return Unique pointer to clone of this object.
     virtual std::unique_ptr<AssetModelFactor> clone() const = 0;
 
-    /// @brief Adjusts the expected return of the asset.
-    /// @param day The current day being simulated for the asset price model.
-    /// @param scheduledEvents The current upcoming scheduled events for the price.
-    virtual void addScheduledEvents(int day, std::vector<AssetEvent> &scheduledEvents) = 0;
+    /// @brief Adds data relating to factor on the current day.
+    /// @param day Day that data is being added for.
+    /// @param data Data of asset relating to particular days.
+    virtual void addData(int day, std::map<std::string, std::any>& data) = 0;
 
     /// @brief Adjusts the expected return of the asset.
     /// @param day The current day being simulated for the asset price model.
