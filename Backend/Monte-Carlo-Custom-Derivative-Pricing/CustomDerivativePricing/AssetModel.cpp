@@ -7,8 +7,9 @@
 AssetModel::AssetModel()
     : gen(std::random_device{}()), normalDist(0, 1) {}
 
-AssetModel::AssetModel(const AssetModel& other)
-    : 
+
+AssetModel::AssetModel(const AssetModel& other) 
+    :  
     price(other.price),
     expectedReturn(other.expectedReturn),
     volatility(other.volatility),
@@ -47,6 +48,13 @@ void AssetModel::advance()
     advanceData();
 }
 
+void AssetModel::setNumTradingDays(int numTradingDays)
+{
+    assert(day == 0);
+
+    this->numTradingDays = numTradingDays;
+}
+
 void AssetModel::setPrice(double price)
 {
     assert(day == 0);
@@ -69,7 +77,7 @@ void AssetModel::setVolatility(double volatility)
     dayVolatility = volatility / sqrt(numTradingDays);
 }
 
-std::map<std::string, std::any> AssetModel::getData() const
+std::map<AssetDataClass, std::any> AssetModel::getData() const
 {
     return data;
 }
@@ -77,9 +85,9 @@ std::map<std::string, std::any> AssetModel::getData() const
 void AssetModel::advanceData() 
 {
     data.clear();
-    data["Asset_Price"] = price;
-    data["Volatility"] = volatility;
-    data["Day_Volatility"] = dayVolatility;
+    data[AssetDataClass::Price] = price;
+    data[AssetDataClass::Volatility] = volatility;
+    data[AssetDataClass::DayVolatility] = dayVolatility;
 
     for(const auto &factor : factors)
     {

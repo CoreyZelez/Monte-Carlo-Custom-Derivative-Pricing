@@ -1,5 +1,6 @@
 #pragma once
 #include "AssetModelFactor.h"
+#include "AssetDataClass.h"
 #include <vector>
 #include <any>
 #include <map>
@@ -17,6 +18,7 @@ class CUSTOM_DERIVATIVE_PRICING_API AssetModel
 public:
     AssetModel();
     AssetModel(const AssetModel& other);
+    AssetModel& operator=(const AssetModel& other) = delete;
 
     void addFactor(const AssetModelFactor& factor);
 
@@ -26,11 +28,12 @@ public:
     /// @brief Advances the asset model by a day.
     void advance();
 
+    void setNumTradingDays(int numTradingDays);
     void setPrice(double price);
     void setExpectedReturn(double expectedReturn);
     void setVolatility(double volatility);
 
-    std::map<std::string, std::any> getData() const;
+    std::map<AssetDataClass, std::any> getData() const;
 
 private:
     int day = 0;  // Current day of model.
@@ -38,11 +41,11 @@ private:
     double expectedReturn = 0;  // Continuously compounded annual expected return of the asset. 
     double volatility = 0;  // Annualised volatility of the asset.
     double dayVolatility = 0;  // Day volatility of the most recent day simulated.
-    const int numTradingDays = 252;
+    int numTradingDays = 252;
 
     std::vector<std::unique_ptr<AssetModelFactor>> factors;  // Custom factors influencing price, expected return, and volatility.
 
-    std::map<std::string, std::any> data;
+    std::map<AssetDataClass, std::any> data;
 
     std::mt19937 gen;
     std::normal_distribution<double> normalDist;

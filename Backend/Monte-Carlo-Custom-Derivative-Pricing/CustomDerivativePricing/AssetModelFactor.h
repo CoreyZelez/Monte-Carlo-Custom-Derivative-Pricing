@@ -1,14 +1,21 @@
 #pragma once
+#include "AssetDataClass.h"
 #include <memory>
 #include <map>
 #include <string>
 #include <vector>
 #include <any>
 
+#ifdef CUSTOM_DERIVATIVE_PRICING_API_EXPORTS
+#define CUSTOM_DERIVATIVE_PRICING_API __declspec(dllexport)
+#else
+#define CUSTOM_DERIVATIVE_PRICING_API __declspec(dllimport)
+#endif
+
 struct AssetEvent;
 
 /// @brief Factor of asset model affecting price, volatility, or expected return.
-class AssetModelFactor
+class CUSTOM_DERIVATIVE_PRICING_API AssetModelFactor
 {
 public:
     /// @brief Clones this object into a unique pointer.
@@ -17,8 +24,8 @@ public:
 
     /// @brief Adds data relating to factor on the current day.
     /// @param day Day that data is being added for.
-    /// @param data Data of asset relating to particular days.
-    virtual void addData(int day, std::map<std::string, std::any>& data) = 0;
+    /// @param data Data of asset relating to days evaluated for.
+    virtual void addData(int day, std::map<AssetDataClass, std::any>& data) = 0;
 
     /// @brief Adjusts the expected return of the asset.
     /// @param day The current day being simulated for the asset price model.

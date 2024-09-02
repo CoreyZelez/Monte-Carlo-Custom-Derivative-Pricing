@@ -57,6 +57,9 @@
     <ClInclude Include="FixedDividendFactor.h">
       <Filter>Header Files\Asset Model</Filter>
     </ClInclude>
+    <ClInclude Include="AssetDataClass.h">
+      <Filter>Header Files\Asset Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CustomDerivativePricing.cpp">

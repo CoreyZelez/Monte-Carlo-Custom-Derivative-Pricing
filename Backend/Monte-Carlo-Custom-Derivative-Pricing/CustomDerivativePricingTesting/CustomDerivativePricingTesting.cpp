@@ -1,24 +1,17 @@
 #include "AssetModel.h"
-#include "AssetModel.cpp"
-#include "AssetPriceSimulator.h"
-#include "AssetPriceSimulator.cpp"
+#include "DerivativeSimulator.h"
 #include "FixedDividendFactor.h"
-#include "FixedDividendFactor.cpp"
 #include <iostream>
 
 int main()
 {
     AssetModel assetModel;
+    assetModel.setNumTradingDays(252);
     assetModel.setPrice(50);
     assetModel.setExpectedReturn(0.1);
     assetModel.setVolatility(0.2);
     assetModel.addFactor(FixedDividendFactor(10, 30, 10));
-    AssetPriceSimulator simulator(assetModel);
+    DerivativeSimulator simulator(assetModel);
 
-    simulator.runSimulations(8, 400000, 600);
-    for(double price : simulator.getPrices()[0])
-    {
-        int d = 0;
-        std::cout << price << " " << ++d << std::endl;
-    }
+    simulator.runAssetSimulations(8, 4000, 600);
 }

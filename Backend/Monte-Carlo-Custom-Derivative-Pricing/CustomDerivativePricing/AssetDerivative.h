@@ -1,24 +1,50 @@
 #pragma once
+#include <map>
+#include <string>
+#include <any>
 
-class AssetDerivative
+#ifdef CUSTOM_DERIVATIVE_PRICING_API_EXPORTS
+#define CUSTOM_DERIVATIVE_PRICING_API __declspec(dllexport)
+#else
+#define CUSTOM_DERIVATIVE_PRICING_API __declspec(dllimport)
+#endif
+
+class CUSTOM_DERIVATIVE_PRICING_API AssetDerivative
 {
 public:
-	/// @brief The value of the derivative is exercised immediately. 
+	AssetDerivative(int numTradingDays);
+
+	/// @brief Updates the derivative 
 	/// @param day The current day for evaluating the derivative.
-	/// @param price The price of the asset on the specified day.
-	virtual void update(int day, double price) = 0;
+	/// @param data Data of asset relating to days evaluated for.
+	/// @param discountRate Continuous rate at which to discount cash flows occurring on current day.
+	virtual void update(int day, const std::map<std::string, std::any> &data, double discountRate);
 
-	/// @brief Signals whether some particular special action, such as exercising or converting, can presently be taken on the derivative. 
-	/// @return Whether an action can be taken.
-	virtual bool isActionable() const = 0;
+	/// @brief Signals whether the derivative can be executed on the most recent evaluated day.
+	/// @return Whether the derivative can be executed.
+	virtual bool isExecutable() const = 0;
 
-	/// @brief The value of the derivative if exercised immediately. 
-	/// @return The payoff of the derivative.
-	virtual double calculatePayoff() const = 0;
+	double getExecutionValue() const;
+	double getAccumulationValue() const;
+	int getNumTradingDays() const;
+	int getDay() const;
 
-	/// @brief The present value of the derivative.
-	/// @param discountRate The continuous rate used to determine the present value of the asset.
-	/// @return The present value of the derivative discounted to the day of inception.
-	virtual double calculatePresentValue(int numTradingDays, double discountRate) const  = 0;
+protected:
+	/// @brief Determines the execution value of the derivative. 
+	/// @param data Data of asset relating to days evaluated for.
+	/// @return The new execution value of the derivative.
+	virtual double calculateExecutionValue(const std::map<std::string, std::any>& data) const = 0;
+
+	/// @brief Determines the discounted value of the derivative from accumulated and current cashflows received if executed. 
+	/// @brief Discounted value of non-executable derivatives will be calculated assuming executability if applicable.
+	/// @param data Data of asset relating to days evaluated for.
+	/// @return The discounted value of the derivative on the current day, otherwise -1 if not applicable.
+	virtual double calculateAccumulationValue(const std::map<std::string, std::any>& data, double discountRate) const = 0;
+
+private:
+	const int numTradingDays;
+	int day = -1;
+	double accumulationValue = 0;  // Present value of all accumulated cashflows with execution on current day.
+	double executionValue = 0;  // Cashflow received from execution on current day.
 };
 

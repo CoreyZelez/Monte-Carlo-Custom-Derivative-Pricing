@@ -3,29 +3,17 @@
 #include <assert.h>
 #include <algorithm>     
 
-VanillaOption::VanillaOption(OptionType type, OptionStyle style, int expiryDay, double strikePrice)
-	: type(type), style(style), expiryDay(expiryDay), strikePrice(strikePrice)
+VanillaOption::VanillaOption(int numTradingDays, OptionType type, OptionStyle style, int expiryDay, double strikePrice)
+	: AssetDerivative(numTradingDays), type(type), style(style), expiryDay(expiryDay), strikePrice(strikePrice) {}
+
+bool VanillaOption::isExecutable() const
 {
+	return style == OptionStyle::American || getDay() == expiryDay;
 }
 
-void VanillaOption::update(int day, double price)
+double VanillaOption::calculateExecutionValue(const std::map<std::string, std::any>& data) const
 {
-	assert(currentDay == day - 1);
-	currentDay = day;
-	currentAssetPrice = price;
-}
-
-bool VanillaOption::isActionable() const
-{
-	return style == OptionStyle::American || currentDay == expiryDay;
-}
-
-double VanillaOption::calculatePayoff() const
-{
-	if(currentDay > expiryDay)
-	{
-		return 0;
-	}
+	double currentAssetPrice = *data.at("Asset_Price")._Cast<double>();
 
 	if(type == OptionType::Call)
 	{
@@ -37,13 +25,8 @@ double VanillaOption::calculatePayoff() const
 	}
 }
 
-double VanillaOption::calculatePresentValue(int numTradingDays, double discountRate) const
+double VanillaOption::calculateAccumulationValue(const std::map<std::string, std::any>& data, double discountRate) const
 {
-	if(currentDay > expiryDay)
-	{
-		return 0;
-	}
-
-	const double discount = discountRate * (currentDay / numTradingDays);  // Continuously compounded.
-	return calculatePayoff() * exp(-discountRate);
+	double r = discountRate * getDay() / getNumTradingDays();
+	return pow(exp(getExecutionValue()), -r);
 }

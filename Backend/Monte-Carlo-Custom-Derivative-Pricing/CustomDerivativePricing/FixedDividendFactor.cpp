@@ -11,16 +11,16 @@ std::unique_ptr<AssetModelFactor> FixedDividendFactor::clone() const
 	return std::make_unique<FixedDividendFactor>(announcementDay, paymentDay, dividendAmount);
 }
 
-void FixedDividendFactor::addData(int day, std::map<std::string, std::any>& data) 
+void FixedDividendFactor::addData(int day, std::map<AssetDataClass, std::any>& data)
 {
 	if(day == announcementDay)
 	{
-		data["Dividend_Announcement"] = std::make_pair(paymentDay, dividendAmount);
+		data[AssetDataClass::DividendAnnouncement] = std::make_pair(paymentDay, dividendAmount);
 	}
 
 	if(day == paymentDay)
 	{
-		data["Dividend"] = dividendAmount;
+		data[AssetDataClass::Dividend] = dividendAmount;
 	}
 }
 
