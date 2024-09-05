@@ -27,6 +27,8 @@ public:
 
 	VanillaOption(int numTradingDays, OptionType type, OptionStyle style, int expiryDay, double strikePrice);
 
+	virtual std::unique_ptr<AssetDerivative> clone() const override;
+
 	virtual bool isExecutable() const override;
 
 protected:

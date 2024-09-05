@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "AssetDerivative.h"
+#include "FinanceMath.h"
 
 AssetDerivative::AssetDerivative(int numTradingDays)
     : numTradingDays(numTradingDays)
@@ -11,6 +12,12 @@ void AssetDerivative::update(int day, const std::map<std::string, std::any>& dat
     this->day = day;
     executionValue = calculateExecutionValue(data);
     accumulationValue = calculateAccumulationValue(data, discountRate);
+    totalValue = executionValue + calulatePresentValue(executionValue, getNumTradingDays(), day, discountRate);
+}
+
+double AssetDerivative::getTotalValue() const
+{
+    return totalValue;
 }
 
 double AssetDerivative::getExecutionValue() const

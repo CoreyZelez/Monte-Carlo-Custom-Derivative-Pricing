@@ -160,8 +160,10 @@
     <ClInclude Include="AssetDerivative.h" />
     <ClInclude Include="AssetModel.h" />
     <ClInclude Include="AssetModelFactor.h" />
+    <ClInclude Include="DerivativeDataClass.h" />
     <ClInclude Include="DerivativeSimulator.h" />
     <ClInclude Include="CustomDerivativePricing.h" />
+    <ClInclude Include="FinanceMath.h" />
     <ClInclude Include="FixedDividendFactor.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
@@ -173,6 +175,7 @@
     <ClCompile Include="DerivativeSimulator.cpp" />
     <ClCompile Include="CustomDerivativePricing.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="FinanceMath.cpp" />
     <ClCompile Include="FixedDividendFactor.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>

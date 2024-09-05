@@ -25,6 +25,12 @@
     <Filter Include="Header Files\Asset Model">
       <UniqueIdentifier>{8707e006-aedc-4590-9702-cf0dbc6cedde}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Utility">
+      <UniqueIdentifier>{03dd17e3-b857-4f90-90b8-9e439c10f110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Utility">
+      <UniqueIdentifier>{91b2824c-737a-49bb-9140-b0ef7fde075e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
@@ -60,6 +66,12 @@
     <ClInclude Include="AssetDataClass.h">
       <Filter>Header Files\Asset Model</Filter>
     </ClInclude>
+    <ClInclude Include="DerivativeDataClass.h">
+      <Filter>Header Files\Derivatives</Filter>
+    </ClInclude>
+    <ClInclude Include="FinanceMath.h">
+      <Filter>Header Files\Utility</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CustomDerivativePricing.cpp">
@@ -85,6 +97,9 @@
     </ClCompile>
     <ClCompile Include="FixedDividendFactor.cpp">
       <Filter>Source Files\Asset Model</Filter>
+    </ClCompile>
+    <ClCompile Include="FinanceMath.cpp">
+      <Filter>Source Files\Utility</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

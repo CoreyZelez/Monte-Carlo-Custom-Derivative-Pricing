@@ -2,6 +2,7 @@
 #include <map>
 #include <string>
 #include <any>
+#include <memory>
 
 #ifdef CUSTOM_DERIVATIVE_PRICING_API_EXPORTS
 #define CUSTOM_DERIVATIVE_PRICING_API __declspec(dllexport)
@@ -14,6 +15,8 @@ class CUSTOM_DERIVATIVE_PRICING_API AssetDerivative
 public:
 	AssetDerivative(int numTradingDays);
 
+	virtual std::unique_ptr<AssetDerivative> clone() const = 0;
+
 	/// @brief Updates the derivative 
 	/// @param day The current day for evaluating the derivative.
 	/// @param data Data of asset relating to days evaluated for.
@@ -24,6 +27,7 @@ public:
 	/// @return Whether the derivative can be executed.
 	virtual bool isExecutable() const = 0;
 
+	double getTotalValue() const;
 	double getExecutionValue() const;
 	double getAccumulationValue() const;
 	int getNumTradingDays() const;
@@ -44,7 +48,8 @@ protected:
 private:
 	const int numTradingDays;
 	int day = -1;
-	double accumulationValue = 0;  // Present value of all accumulated cashflows with execution on current day.
-	double executionValue = 0;  // Cashflow received from execution on current day.
+	double totalValue = 0;  // Present value of all accumulated cashflows and cashflow from execution.
+	double accumulationValue = 0;  // Present value of all accumulated cashflows.
+	double executionValue = 0;  // Cashflow received from execution on current day. Not discounted to present day.
 };
 

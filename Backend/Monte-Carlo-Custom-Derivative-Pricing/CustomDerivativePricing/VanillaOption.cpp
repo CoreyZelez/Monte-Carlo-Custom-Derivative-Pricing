@@ -6,6 +6,11 @@
 VanillaOption::VanillaOption(int numTradingDays, OptionType type, OptionStyle style, int expiryDay, double strikePrice)
 	: AssetDerivative(numTradingDays), type(type), style(style), expiryDay(expiryDay), strikePrice(strikePrice) {}
 
+std::unique_ptr<AssetDerivative> VanillaOption::clone() const
+{
+	return std::make_unique<VanillaOption>(getNumTradingDays(), type, style, expiryDay, strikePrice);
+}
+
 bool VanillaOption::isExecutable() const
 {
 	return style == OptionStyle::American || getDay() == expiryDay;
@@ -13,7 +18,7 @@ bool VanillaOption::isExecutable() const
 
 double VanillaOption::calculateExecutionValue(const std::map<std::string, std::any>& data) const
 {
-	double currentAssetPrice = *data.at("Asset_Price")._Cast<double>();
+	double currentAssetPrice = *data.at("Asset_Price")._Cast<double>();             /////////////////////// OUTDATED!!!!!!!!!!
 
 	if(type == OptionType::Call)
 	{
@@ -27,6 +32,5 @@ double VanillaOption::calculateExecutionValue(const std::map<std::string, std::a
 
 double VanillaOption::calculateAccumulationValue(const std::map<std::string, std::any>& data, double discountRate) const
 {
-	double r = discountRate * getDay() / getNumTradingDays();
-	return pow(exp(getExecutionValue()), -r);
+	return 0;
 }
