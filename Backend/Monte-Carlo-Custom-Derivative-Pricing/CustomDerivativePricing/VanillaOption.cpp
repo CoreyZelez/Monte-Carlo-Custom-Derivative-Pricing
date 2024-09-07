@@ -16,9 +16,9 @@ bool VanillaOption::isExecutable() const
 	return style == OptionStyle::American || getDay() == expiryDay;
 }
 
-double VanillaOption::calculateExecutionValue(const std::map<std::string, std::any>& data) const
+double VanillaOption::calculateExecutionValue(const std::map<AssetDataClass, std::any>& data) const
 {
-	double currentAssetPrice = *data.at("Asset_Price")._Cast<double>();             /////////////////////// OUTDATED!!!!!!!!!!
+	double currentAssetPrice = *data.at(AssetDataClass::Price)._Cast<double>();     
 
 	if(type == OptionType::Call)
 	{
@@ -30,7 +30,7 @@ double VanillaOption::calculateExecutionValue(const std::map<std::string, std::a
 	}
 }
 
-double VanillaOption::calculateAccumulationValue(const std::map<std::string, std::any>& data, double discountRate) const
+double VanillaOption::calculateAccumulationValue(const std::map<AssetDataClass, std::any>& data, double discountRate) const
 {
 	return 0;
 }

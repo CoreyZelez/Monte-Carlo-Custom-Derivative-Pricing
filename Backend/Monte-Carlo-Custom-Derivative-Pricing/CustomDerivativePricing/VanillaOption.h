@@ -32,8 +32,8 @@ public:
 	virtual bool isExecutable() const override;
 
 protected:
-	virtual double calculateExecutionValue(const std::map<std::string, std::any>& data) const override;
-	virtual double calculateAccumulationValue(const std::map<std::string, std::any>& data, double discountRate) const override;
+	virtual double calculateExecutionValue(const std::map<AssetDataClass, std::any>& data) const override;
+	virtual double calculateAccumulationValue(const std::map<AssetDataClass, std::any>& data, double discountRate) const override;
 
 private:
 	OptionType type;

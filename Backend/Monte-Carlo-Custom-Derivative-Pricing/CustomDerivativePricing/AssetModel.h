@@ -16,7 +16,7 @@
 class CUSTOM_DERIVATIVE_PRICING_API AssetModel
 {
 public:
-    AssetModel();
+    AssetModel(int numTradingDays);
     AssetModel(const AssetModel& other);
     AssetModel& operator=(const AssetModel& other) = delete;
 
@@ -33,20 +33,22 @@ public:
     void setExpectedReturn(double expectedReturn);
     void setVolatility(double volatility);
 
+    int getDay() const;
+    double getPrice() const;
+    double getExpectedReturn() const;
+    double getVolatility() const;
+    double getDayVolatility() const;
     std::map<AssetDataClass, std::any> getData() const;
 
 private:
     int day = 0;  // Current day of model.
-    double price = 0;  // Current asset price.
-    double expectedReturn = 0;  // Continuously compounded annual expected return of the asset. 
-    double volatility = 0;  // Annualised volatility of the asset.
-    double dayVolatility = 0;  // Day volatility of the most recent day simulated.
-    int numTradingDays = 252;
-
+    double price;  // Current asset price.
+    double expectedReturn;  // Continuously compounded annual expected return of the asset. 
+    double volatility;  // Annualised volatility of the asset.
+    double dayVolatility;  // Day volatility of the most recent day simulated.
+    int numTradingDays;
     std::vector<std::unique_ptr<AssetModelFactor>> factors;  // Custom factors influencing price, expected return, and volatility.
-
     std::map<AssetDataClass, std::any> data;
-
     std::mt19937 gen;
     std::normal_distribution<double> normalDist;
 

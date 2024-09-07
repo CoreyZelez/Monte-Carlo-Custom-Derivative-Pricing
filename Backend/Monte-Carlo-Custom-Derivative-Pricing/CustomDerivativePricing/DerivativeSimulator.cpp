@@ -60,11 +60,19 @@ void DerivativeSimulator::simulate(int threadNum, int numSimulations, int numDay
     
         model.initData();
         assetData[simIndex][0] = model.getData();
+        for(auto& derivative : derivatives)
+        {
+            derivative.get()->update(0, model.getExpectedReturn(), assetData[simIndex][0]);
+        }
     
         for(int day = 1; day <= numDays; ++day)
         {
             model.advance();
             assetData[simIndex][day] = model.getData();
+            for(auto& derivative : derivatives)
+            {
+                derivative.get()->update(0, model.getExpectedReturn(), assetData[simIndex][0]);
+            }
         }
     }
 }

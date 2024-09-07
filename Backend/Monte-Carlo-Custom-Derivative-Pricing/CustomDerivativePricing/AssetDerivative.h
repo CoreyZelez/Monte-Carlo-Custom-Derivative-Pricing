@@ -1,4 +1,6 @@
 #pragma once
+#include "DerivativeDataClass.h"
+#include "AssetDataClass.h"
 #include <map>
 #include <string>
 #include <any>
@@ -19,9 +21,9 @@ public:
 
 	/// @brief Updates the derivative 
 	/// @param day The current day for evaluating the derivative.
-	/// @param data Data of asset relating to days evaluated for.
 	/// @param discountRate Continuous rate at which to discount cash flows occurring on current day.
-	virtual void update(int day, const std::map<std::string, std::any> &data, double discountRate);
+	/// @param assetData Data of asset relating to days evaluated for.
+	virtual void update(int day, double discountRate, const std::map<AssetDataClass, std::any> &assetData);
 
 	/// @brief Signals whether the derivative can be executed on the most recent evaluated day.
 	/// @return Whether the derivative can be executed.
@@ -37,13 +39,13 @@ protected:
 	/// @brief Determines the execution value of the derivative. 
 	/// @param data Data of asset relating to days evaluated for.
 	/// @return The new execution value of the derivative.
-	virtual double calculateExecutionValue(const std::map<std::string, std::any>& data) const = 0;
+	virtual double calculateExecutionValue(const std::map<AssetDataClass, std::any>& data) const = 0;
 
 	/// @brief Determines the discounted value of the derivative from accumulated and current cashflows received if executed. 
 	/// @brief Discounted value of non-executable derivatives will be calculated assuming executability if applicable.
 	/// @param data Data of asset relating to days evaluated for.
 	/// @return The discounted value of the derivative on the current day, otherwise -1 if not applicable.
-	virtual double calculateAccumulationValue(const std::map<std::string, std::any>& data, double discountRate) const = 0;
+	virtual double calculateAccumulationValue(const std::map<AssetDataClass, std::any>& data, double discountRate) const = 0;
 
 private:
 	const int numTradingDays;
@@ -51,5 +53,6 @@ private:
 	double totalValue = 0;  // Present value of all accumulated cashflows and cashflow from execution.
 	double accumulationValue = 0;  // Present value of all accumulated cashflows.
 	double executionValue = 0;  // Cashflow received from execution on current day. Not discounted to present day.
+	std::map<DerivativeDataClass, double> data;
 };
 

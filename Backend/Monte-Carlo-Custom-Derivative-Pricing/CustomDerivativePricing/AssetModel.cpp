@@ -4,8 +4,8 @@
 #include <random>
 #include <assert.h>
 
-AssetModel::AssetModel()
-    : gen(std::random_device{}()), normalDist(0, 1) {}
+AssetModel::AssetModel(int numTradingDays)
+    : numTradingDays(numTradingDays), gen(std::random_device{}()), normalDist(0, 1) {}
 
 
 AssetModel::AssetModel(const AssetModel& other) 
@@ -21,8 +21,10 @@ AssetModel::AssetModel(const AssetModel& other)
 {
     // Deep copy of the components vector using the clone method
     factors.reserve(other.factors.size());
-    for(const auto& factor : other.factors) {
-        if(factor) {
+    for(const auto& factor : other.factors) 
+    {
+        if(factor) 
+        {
             factors.push_back(factor->clone());
         }
     }
@@ -75,6 +77,31 @@ void AssetModel::setVolatility(double volatility)
 
     this->volatility = volatility;
     dayVolatility = volatility / sqrt(numTradingDays);
+}
+
+int AssetModel::getDay() const
+{
+    return day;
+}
+
+double AssetModel::getPrice() const
+{
+    return price;
+}
+
+double AssetModel::getExpectedReturn() const
+{
+    return expectedReturn;
+}
+
+double AssetModel::getVolatility() const
+{
+    return volatility;
+}
+
+double AssetModel::getDayVolatility() const
+{
+    return dayVolatility;
 }
 
 std::map<AssetDataClass, std::any> AssetModel::getData() const
