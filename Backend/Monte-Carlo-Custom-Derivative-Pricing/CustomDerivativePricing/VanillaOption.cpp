@@ -4,7 +4,8 @@
 #include <algorithm>     
 
 VanillaOption::VanillaOption(int numTradingDays, OptionType type, OptionStyle style, int expiryDay, double strikePrice)
-	: AssetDerivative(numTradingDays), type(type), style(style), expiryDay(expiryDay), strikePrice(strikePrice) {}
+	: AssetDerivative(numTradingDays), type(type), style(style), expiryDay(expiryDay), strikePrice(strikePrice) 
+{}
 
 std::unique_ptr<AssetDerivative> VanillaOption::clone() const
 {
@@ -33,4 +34,17 @@ double VanillaOption::calculateExecutionValue(const std::map<AssetDataClass, std
 double VanillaOption::calculateAccumulationValue(const std::map<AssetDataClass, std::any>& data, double discountRate) const
 {
 	return 0;
+}
+
+extern "C"
+{
+	VanillaOption* vanilla_option_create(int numTradingDays, VanillaOption::OptionType type, VanillaOption::OptionStyle style, int expiryDay, double strikePrice)
+	{
+		return new VanillaOption(numTradingDays, type, style, expiryDay, strikePrice);
+	}
+
+	void vanilla_option_delete(VanillaOption* option)
+	{
+		delete option;
+	}
 }

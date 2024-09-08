@@ -4,8 +4,10 @@
 #include <random>
 #include <assert.h>
 
-AssetModel::AssetModel(int numTradingDays)
-    : numTradingDays(numTradingDays), gen(std::random_device{}()), normalDist(0, 1) {}
+AssetModel::AssetModel(int numTradingDays, double price, double expectedReturn, double volatility, std::vector<std::unique_ptr<AssetModelFactor>>& factors)
+    : numTradingDays(numTradingDays), price(price), expectedReturn(expectedReturn), volatility(volatility), factors(std::move(factors)), 
+    gen(std::random_device{}()), normalDist(0, 1) 
+{}
 
 
 AssetModel::AssetModel(const AssetModel& other) 
@@ -19,7 +21,6 @@ AssetModel::AssetModel(const AssetModel& other)
     gen(other.gen),
     normalDist(other.normalDist)
 {
-    // Deep copy of the components vector using the clone method
     factors.reserve(other.factors.size());
     for(const auto& factor : other.factors) 
     {
@@ -50,35 +51,6 @@ void AssetModel::advance()
     advanceData();
 }
 
-void AssetModel::setNumTradingDays(int numTradingDays)
-{
-    assert(day == 0);
-
-    this->numTradingDays = numTradingDays;
-}
-
-void AssetModel::setPrice(double price)
-{
-    assert(day == 0);
-
-    this->price = price;
-}
-
-void AssetModel::setExpectedReturn(double expectedReturn)
-{
-    assert(day == 0);
-
-    this->expectedReturn = expectedReturn;
-}
-
-void AssetModel::setVolatility(double volatility)
-{
-    assert(day == 0);
-
-    this->volatility = volatility;
-    dayVolatility = volatility / sqrt(numTradingDays);
-}
-
 int AssetModel::getDay() const
 {
     return day;
@@ -104,7 +76,7 @@ double AssetModel::getDayVolatility() const
     return dayVolatility;
 }
 
-std::map<AssetDataClass, std::any> AssetModel::getData() const
+const std::map<AssetDataClass, std::any>& AssetModel::getData() const
 {
     return data;
 }
@@ -157,5 +129,18 @@ void AssetModel::advancePrice()
     for(auto& factor : factors)
     {
         factor.get()->adjustPrice(day, price);
+    }
+}
+
+extern "C"
+{
+    AssetModel* asset_model_create(int numTradingDays, double price, double expectedReturn, double volatility, std::vector<std::unique_ptr<AssetModelFactor>>* factors)
+    {
+        return new AssetModel(numTradingDays, price, expectedReturn, volatility, *factors);
+    }
+
+    void asset_model_delete(AssetModel* model)
+    {
+        delete model;
     }
 }

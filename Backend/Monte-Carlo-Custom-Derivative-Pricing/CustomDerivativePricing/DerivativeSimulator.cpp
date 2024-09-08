@@ -3,8 +3,8 @@
 #include <thread>
 #include <iostream>
 
-DerivativeSimulator::DerivativeSimulator(AssetModel model)
-	: model(std::move(model))
+DerivativeSimulator::DerivativeSimulator(AssetModel model, std::vector<std::unique_ptr<AssetDerivative>>& derivatives)
+	: model(std::move(model)), derivatives(std::move(derivatives))
 {
 }
 
@@ -12,9 +12,12 @@ void DerivativeSimulator::runSimulations(int numThreads, int numSimulations, int
 {
     assetData.clear();
     derivativeData.clear();
-
     assetData.resize(numThreads * numSimulations);
     derivativeData.resize(numThreads * numSimulations);
+    for(int i = 0; i < derivativeData.size(); ++i)
+    {
+        derivativeData[i].resize(derivatives.size());
+    }
 
     std::vector<std::thread> threads;
 
@@ -27,11 +30,17 @@ void DerivativeSimulator::runSimulations(int numThreads, int numSimulations, int
     {
         thread.join();
     }
-}
 
-void DerivativeSimulator::addDerivative(std::unique_ptr<AssetDerivative> derivative)
-{
-    derivatives.push_back(std::move(derivative));
+    for(int derivativeIndex = 0; derivativeIndex < derivatives.size(); ++derivativeIndex)
+    {
+        for(int day = 0; day < numDays; ++day)
+        {
+               std::cout << "Day " << day << "  Asset Price " << *assetData[0][day][AssetDataClass::Price]._Cast<double>() <<
+                   "  Deriv Execution Value " << derivativeData[0][derivativeIndex][day][DerivativeDataClass::Execution] << 
+                   "  Deriv Accumulation Value " << derivativeData[0][derivativeIndex][day][DerivativeDataClass::Accumulation] << 
+                   "  Deriv Present Value " << derivativeData[0][derivativeIndex][day][DerivativeDataClass::Total] << "\n";
+        }
+    }
 }
 
 bool DerivativeSimulator::hasAssetData(int simIndex, int day, AssetDataClass dataClass) const
@@ -39,9 +48,20 @@ bool DerivativeSimulator::hasAssetData(int simIndex, int day, AssetDataClass dat
     return assetData[simIndex].at(day).count(dataClass) == 1;
 }
 
+bool DerivativeSimulator::hasDerivativeData(int simIndex, int derivativeIndex, int day, DerivativeDataClass dataClass) const
+{
+    return derivativeData[simIndex][derivativeIndex].at(day).count(dataClass) == 1;
+
+}
+
 std::any DerivativeSimulator::getAssetData(int simIndex, int day, AssetDataClass dataClass) const
 {
     return assetData[simIndex].at(day).at(dataClass);
+}
+
+double DerivativeSimulator::getDerivativeData(int simIndex, int derivativeIndex, int day, DerivativeDataClass dataClass) const
+{
+    return derivativeData[simIndex][derivativeIndex].at(day).at(dataClass);
 }
 
 void DerivativeSimulator::simulate(int threadNum, int numSimulations, int numDays)
@@ -60,18 +80,20 @@ void DerivativeSimulator::simulate(int threadNum, int numSimulations, int numDay
     
         model.initData();
         assetData[simIndex][0] = model.getData();
-        for(auto& derivative : derivatives)
+        for(int derivativeIndex = 0; derivativeIndex < derivatives.size(); ++derivativeIndex)
         {
-            derivative.get()->update(0, model.getExpectedReturn(), assetData[simIndex][0]);
+            derivatives[derivativeIndex].get()->update(0, model.getExpectedReturn(), assetData[simIndex][0]);
+            derivativeData[simIndex][derivativeIndex][0] = derivatives[derivativeIndex].get()->getData();
         }
     
         for(int day = 1; day <= numDays; ++day)
         {
             model.advance();
             assetData[simIndex][day] = model.getData();
-            for(auto& derivative : derivatives)
+            for(int derivativeIndex = 0; derivativeIndex < derivatives.size(); ++derivativeIndex)
             {
-                derivative.get()->update(0, model.getExpectedReturn(), assetData[simIndex][0]);
+                derivatives[derivativeIndex].get()->update(day, model.getExpectedReturn(), assetData[simIndex][day]);
+                derivativeData[simIndex][derivativeIndex][day] = derivatives[derivativeIndex].get()->getData();
             }
         }
     }
@@ -79,9 +101,53 @@ void DerivativeSimulator::simulate(int threadNum, int numSimulations, int numDay
 
 extern "C"
 {
-    CUSTOM_DERIVATIVE_PRICING_API DerivativeSimulator* DerivativeSimulator_new(AssetModel* model, AssetDerivative* derivative) { return new DerivativeSimulator(*model); }
-    CUSTOM_DERIVATIVE_PRICING_API void DerivativeSimulator_delete(DerivativeSimulator* obj) { delete obj; }
-    CUSTOM_DERIVATIVE_PRICING_API void DerivativeSimulator_runSimulations(DerivativeSimulator* obj, int numThreads, int numSimulations, int numDays) { obj->runSimulations(numThreads, numSimulations, numDays); }
-    CUSTOM_DERIVATIVE_PRICING_API bool DerivativeSimulator_hasAssetData(DerivativeSimulator* obj, int simIndex, int day, int assetDataClass) { return obj->hasAssetData(simIndex, day, static_cast<AssetDataClass>(assetDataClass)); }
-    CUSTOM_DERIVATIVE_PRICING_API int DerivativeSimulator_getIntAssetData(DerivativeSimulator* obj, int simIndex, int day, int assetDataClass) { return std::any_cast<int>(obj->getAssetData(simIndex, day, static_cast<AssetDataClass>(assetDataClass))); }
+    DerivativeSimulator* derivative_simulator_create(AssetModel* model, std::vector<std::unique_ptr<AssetDerivative>>* derivatives)
+    {
+        return new DerivativeSimulator(*model, *derivatives);
+    }
+
+    void derivative_simulator_delete(DerivativeSimulator* simulator)
+    {
+        delete simulator;
+    }
+
+    void derivative_simulator_run_simulations(DerivativeSimulator* simulator, int numThreads, int numSimulations, int numDays)
+    {
+        simulator->runSimulations(numThreads, numSimulations, numDays);
+    }
+
+    bool derivative_simulator_has_asset_data(DerivativeSimulator* simulator, int simIndex, int day, AssetDataClass dataClass)
+    {
+        return simulator->hasAssetData(simIndex, day, dataClass);
+    }
+
+    bool derivative_simulator_has_derivative_data(DerivativeSimulator* simulator, int simIndex, int derivativeIndex, int day, DerivativeDataClass dataClass)
+    {
+        return simulator->hasDerivativeData(simIndex, derivativeIndex, day, dataClass);
+    }
+
+    double derivative_simulator_get_asset_data_as_double(DerivativeSimulator* simulator, int simIndex, int day, AssetDataClass dataClass)
+    {
+        auto data = simulator->getAssetData(simIndex, day, dataClass);
+        if(data.type() == typeid(double))
+        {
+            return std::any_cast<double>(data);
+        }
+        throw std::runtime_error("Data is not of type double");
+    }
+
+    int derivative_simulator_get_asset_data_as_int(DerivativeSimulator* simulator, int simIndex, int day, AssetDataClass dataClass)
+    {
+        auto data = simulator->getAssetData(simIndex, day, dataClass);
+        if(data.type() == typeid(int))
+        {
+            return std::any_cast<int>(data);
+        }
+        throw std::runtime_error("Data is not of type int");
+    }
+
+    double derivative_simulator_get_derivative_data(DerivativeSimulator* simulator, int simIndex, int derivativeIndex, int day, DerivativeDataClass dataClass)
+    {
+        return simulator->getDerivativeData(simIndex, derivativeIndex, day, dataClass);
+    }
 }

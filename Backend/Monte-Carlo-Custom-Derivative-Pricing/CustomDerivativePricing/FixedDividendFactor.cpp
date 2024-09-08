@@ -43,3 +43,16 @@ void FixedDividendFactor::adjustPrice(int day, double& price)
 		price -= dividendAmount;
 	}
 }
+
+extern "C" 
+{
+	FixedDividendFactor* fixed_dividend_factor_create(int announcementDay, int paymentDay, double dividendAmount) 
+	{
+		return new FixedDividendFactor(announcementDay, paymentDay, dividendAmount);
+	}
+
+	void fixed_dividend_factor_delete(FixedDividendFactor* factor) 
+	{
+		delete factor;
+	}
+}

@@ -34,6 +34,7 @@ public:
 	double getAccumulationValue() const;
 	int getNumTradingDays() const;
 	int getDay() const;
+	const std::map<DerivativeDataClass, double>& getData() const;
 
 protected:
 	/// @brief Determines the execution value of the derivative. 

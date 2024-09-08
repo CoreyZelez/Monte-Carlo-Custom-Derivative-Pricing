@@ -12,7 +12,7 @@ void AssetDerivative::update(int day, double discountRate, const std::map<AssetD
     this->day = day;
     executionValue = calculateExecutionValue(assetData);
     accumulationValue = calculateAccumulationValue(assetData, discountRate);
-    totalValue = executionValue + calulatePresentValue(executionValue, getNumTradingDays(), day, discountRate);
+    totalValue = accumulationValue + calulatePresentValue(executionValue, getNumTradingDays(), day, discountRate);
     
     data.clear();
     data[DerivativeDataClass::Execution] = executionValue;
@@ -43,4 +43,9 @@ int AssetDerivative::getNumTradingDays() const
 int AssetDerivative::getDay() const
 {
     return day;
+}
+
+const std::map<DerivativeDataClass, double>& AssetDerivative::getData() const
+{
+    return data;
 }

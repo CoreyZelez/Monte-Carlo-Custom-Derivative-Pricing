@@ -7,7 +7,6 @@
 #define CUSTOM_DERIVATIVE_PRICING_API __declspec(dllimport)
 #endif
 
-/// Dividend with fixed details.
 class CUSTOM_DERIVATIVE_PRICING_API FixedDividendFactor : public AssetModelFactor
 {
 public:
@@ -25,4 +24,10 @@ private:
     int paymentDay;
     double dividendAmount;
 };
+
+extern "C" 
+{
+    CUSTOM_DERIVATIVE_PRICING_API FixedDividendFactor* fixed_dividend_factor_create(int announcementDay, int paymentDay, double dividendAmount);
+    CUSTOM_DERIVATIVE_PRICING_API void fixed_dividend_factor_delete(FixedDividendFactor* factor);
+}
 

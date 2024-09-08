@@ -8,13 +8,16 @@
 
 int main()
 {
-    //AssetModel assetModel;
-    //assetModel.setNumTradingDays(252);
-    //assetModel.setPrice(50);
-    //assetModel.setExpectedReturn(0.1);
-    //assetModel.setVolatility(0.2);
-    //assetModel.addFactor(FixedDividendFactor(10, 30, 10));
-    //std::unique_ptr<AssetDerivative> derivative = std::make_unique<VanillaOption>(252, VanillaOption::OptionType::Call, VanillaOption::OptionStyle::American, 200, 60);
-    //DerivativeSimulator simulator(assetModel, std::move(derivative));
-    //simulator.runSimulations(8, 4000, 300);
+    std::unique_ptr<AssetDerivative> vanillaCall = std::make_unique<VanillaOption>(252, VanillaOption::OptionType::Call, VanillaOption::OptionStyle::American, 200, 40);
+    std::vector<std::unique_ptr<AssetDerivative>> derivatives;
+    derivatives.push_back(std::move(vanillaCall));
+    
+    std::unique_ptr<AssetModelFactor> fixedDividend = std::make_unique<FixedDividendFactor>(10, 30, 10);
+    std::vector<std::unique_ptr<AssetModelFactor>> factors;
+    factors.push_back(std::move(fixedDividend));
+    
+    AssetModel assetModel(252, 50, 0.1, 0.2, factors);
+    DerivativeSimulator simulator(assetModel, derivatives);
+    
+    simulator.runSimulations(8, 4000, 300);
 }

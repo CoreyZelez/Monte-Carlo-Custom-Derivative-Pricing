@@ -42,3 +42,9 @@ private:
 	double strikePrice;
 };
 
+
+extern "C"
+{
+	CUSTOM_DERIVATIVE_PRICING_API VanillaOption* vanilla_option_create(int numTradingDays, VanillaOption::OptionType type, VanillaOption::OptionStyle style, int expiryDay, double strikePrice);
+	CUSTOM_DERIVATIVE_PRICING_API void vanilla_option_delete(VanillaOption* option);
+}
