@@ -101,9 +101,15 @@ void DerivativeSimulator::simulate(int threadNum, int numSimulations, int numDay
 
 extern "C"
 {
-    DerivativeSimulator* derivative_simulator_create(AssetModel* model, std::vector<std::unique_ptr<AssetDerivative>>* derivatives)
+    DerivativeSimulator* derivative_simulator_create(AssetModel* model, AssetDerivative** derivativePtrs, int derivativePtrsSize)
     {
-        return new DerivativeSimulator(*model, *derivatives);
+        std::vector<std::unique_ptr<AssetDerivative>> derivatives;
+        for(int derivative = 0; derivative < derivativePtrsSize; derivative++)
+        {
+            derivatives.push_back(std::unique_ptr<AssetDerivative>(derivativePtrs[derivative]));
+        }
+
+        return new DerivativeSimulator(*model, derivatives);
     }
 
     void derivative_simulator_delete(DerivativeSimulator* simulator)
@@ -133,7 +139,6 @@ extern "C"
         {
             return std::any_cast<double>(data);
         }
-        throw std::runtime_error("Data is not of type double");
     }
 
     int derivative_simulator_get_asset_data_as_int(DerivativeSimulator* simulator, int simIndex, int day, AssetDataClass dataClass)
@@ -143,7 +148,6 @@ extern "C"
         {
             return std::any_cast<int>(data);
         }
-        throw std::runtime_error("Data is not of type int");
     }
 
     double derivative_simulator_get_derivative_data(DerivativeSimulator* simulator, int simIndex, int derivativeIndex, int day, DerivativeDataClass dataClass)

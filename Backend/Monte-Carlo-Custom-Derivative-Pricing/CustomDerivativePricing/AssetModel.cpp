@@ -134,13 +134,25 @@ void AssetModel::advancePrice()
 
 extern "C"
 {
-    AssetModel* asset_model_create(int numTradingDays, double price, double expectedReturn, double volatility, std::vector<std::unique_ptr<AssetModelFactor>>* factors)
+    AssetModel* asset_model_create(int numTradingDays, double price, double expectedReturn, double volatility, AssetModelFactor** factorPtrs, int factorPtrsSize)
     {
-        return new AssetModel(numTradingDays, price, expectedReturn, volatility, *factors);
+        std::vector<std::unique_ptr<AssetModelFactor>> factors;
+        for(int factor = 0; factor < factorPtrsSize; factor++)
+        {
+            factors.push_back(std::unique_ptr<AssetModelFactor>(factorPtrs[factor]));
+        }
+
+        return new AssetModel(numTradingDays, price, expectedReturn, volatility, factors);
     }
 
     void asset_model_delete(AssetModel* model)
     {
         delete model;
+    }
+
+    int get_day(AssetModel* model)
+    {
+        model->advance();
+        return model->getDay();
     }
 }

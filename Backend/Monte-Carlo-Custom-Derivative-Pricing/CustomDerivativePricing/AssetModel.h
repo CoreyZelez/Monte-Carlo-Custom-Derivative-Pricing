@@ -56,6 +56,7 @@ private:
 
 extern "C"
 {
-    CUSTOM_DERIVATIVE_PRICING_API AssetModel* asset_model_create(int numTradingDays, double price, double expectedReturn, double volatility, std::vector<std::unique_ptr<AssetModelFactor>>* factors);
+    CUSTOM_DERIVATIVE_PRICING_API AssetModel* asset_model_create(int numTradingDays, double price, double expectedReturn, double volatility, AssetModelFactor** factorPtrs, int factorPtrsSize);
     CUSTOM_DERIVATIVE_PRICING_API void asset_model_delete(AssetModel* model);
+    CUSTOM_DERIVATIVE_PRICING_API int get_day(AssetModel* model);
 }

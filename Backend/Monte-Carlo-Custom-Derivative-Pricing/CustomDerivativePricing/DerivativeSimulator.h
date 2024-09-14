@@ -48,7 +48,7 @@ private:
 
 extern "C"
 {
-	CUSTOM_DERIVATIVE_PRICING_API DerivativeSimulator* derivative_simulator_create(AssetModel* model, std::vector<std::unique_ptr<AssetDerivative>>* derivatives);
+	CUSTOM_DERIVATIVE_PRICING_API DerivativeSimulator* derivative_simulator_create(AssetModel* model, AssetDerivative** derivativePtrs, int derivativePtrsSize);
 	CUSTOM_DERIVATIVE_PRICING_API void derivative_simulator_delete(DerivativeSimulator* simulator);
 
 	CUSTOM_DERIVATIVE_PRICING_API void derivative_simulator_run_simulations(DerivativeSimulator* simulator, int numThreads, int numSimulations, int numDays);
