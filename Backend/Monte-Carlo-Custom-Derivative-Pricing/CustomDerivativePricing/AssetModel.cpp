@@ -18,8 +18,8 @@ AssetModel::AssetModel(const AssetModel& other)
     dayVolatility(other.dayVolatility),
     day(other.day),
     numTradingDays(other.numTradingDays),
-    gen(other.gen),
-    normalDist(other.normalDist)
+    gen(std::random_device{}()),
+    normalDist(0, 1)
 {
     factors.reserve(other.factors.size());
     for(const auto& factor : other.factors) 

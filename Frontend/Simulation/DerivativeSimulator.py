@@ -46,8 +46,11 @@ cdp_lib.derivative_simulator_delete.restype = None
 
 # Define the AssetDataClass and DerivativeDataClass enums if not defined
 class AssetDataClass(Enum):
-    # Define values as needed
-    EXAMPLE = 0
+    PRICE = 0
+    VOLATILITY = 1
+    DAY_VOLATILITY = 2
+    DIVDIEND = 3
+    DIVIDEND_ANNOUNCEMENT = 4
 
 class DerivativeDataClass(Enum):
     # Define values as needed
@@ -58,15 +61,15 @@ class DerivativeSimulator:
     Class to interface with the DerivativeSimulator C++ class through ctypes.
 
     Attributes:
-        _simulator_ptr (ctypes.POINTER(ctypes.c_void_p)): Pointer to the C++ DerivativeSimulator instance.
+        _simulator_ptr: Pointer to the C++ DerivativeSimulator instance.
     """
     def __init__(self, model: AssetModel, derivatives: list):
         """
         Initializes the DerivativeSimulator object by creating an instance in the C++ library.
 
         Args:
-            model (AssetModel): An instance of AssetModel to be used in simulations.
-            derivatives (list): A list of AssetDerivative instances.
+            model: An instance of AssetModel to be used in simulations.
+            derivatives: A list of AssetDerivative instances.
         """
         self._simulator_ptr = None
 
@@ -85,9 +88,9 @@ class DerivativeSimulator:
         Runs simulations using the specified parameters.
 
         Args:
-            num_threads (int): Number of threads to use.
-            num_simulations (int): Number of simulations per thread.
-            num_days (int): Number of days to simulate.
+            num_threads: Number of threads to use.
+            num_simulations: Number of simulations per thread.
+            num_days: Number of days to simulate.
         """
         cdp_lib.derivative_simulator_run_simulations(self._simulator_ptr, num_threads, num_simulations, num_days)
 
@@ -96,9 +99,9 @@ class DerivativeSimulator:
         Checks if asset data is available for the given simulation index, day, and data class.
 
         Args:
-            sim_index (int): Simulation index.
-            day (int): Day of the simulation.
-            data_class (AssetDataClass): Data class to check.
+            sim_index: Simulation index.
+            day: Day of the simulation.
+            data_class: Data class to check.
 
         Returns:
             bool: True if data is available, False otherwise.
@@ -110,10 +113,10 @@ class DerivativeSimulator:
         Checks if derivative data is available for the given simulation index, derivative index, day, and data class.
 
         Args:
-            sim_index (int): Simulation index.
-            derivative_index (int): Derivative index.
-            day (int): Day of the simulation.
-            data_class (DerivativeDataClass): Data class to check.
+            sim_index: Simulation index.
+            derivative_index: Derivative index.
+            day: Day of the simulation.
+            data_class: Data class to check.
 
         Returns:
             bool: True if data is available, False otherwise.
@@ -125,9 +128,9 @@ class DerivativeSimulator:
         Retrieves asset data as a double value.
 
         Args:
-            sim_index (int): Simulation index.
-            day (int): Day of the simulation.
-            data_class (AssetDataClass): Data class to retrieve.
+            sim_index: Simulation index.
+            day: Day of the simulation.
+            data_class: Data class to retrieve.
 
         Returns:
             float: The asset data value.
@@ -139,9 +142,9 @@ class DerivativeSimulator:
         Retrieves asset data as an integer value.
 
         Args:
-            sim_index (int): Simulation index.
-            day (int): Day of the simulation.
-            data_class (AssetDataClass): Data class to retrieve.
+            sim_index: Simulation index.
+            day: Day of the simulation.
+            data_class: Data class to retrieve.
 
         Returns:
             int: The asset data value.
@@ -153,10 +156,10 @@ class DerivativeSimulator:
         Retrieves derivative data as a double value.
 
         Args:
-            sim_index (int): Simulation index.
-            derivative_index (int): Derivative index.
-            day (int): Day of the simulation.
-            data_class (DerivativeDataClass): Data class to retrieve.
+            sim_index: Simulation index.
+            derivative_index: Derivative index.
+            day: Day of the simulation.
+            data_class: Data class to retrieve.
 
         Returns:
             float: The derivative data value.

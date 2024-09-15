@@ -31,14 +31,14 @@ void DerivativeSimulator::runSimulations(int numThreads, int numSimulations, int
         thread.join();
     }
 
-    for(int derivativeIndex = 0; derivativeIndex < derivatives.size(); ++derivativeIndex)
+    for(int simIndex = 0; simIndex < 3; ++simIndex)
     {
         for(int day = 0; day < numDays; ++day)
         {
-               std::cout << "Day " << day << "  Asset Price " << *assetData[0][day][AssetDataClass::Price]._Cast<double>() <<
-                   "  Deriv Execution Value " << derivativeData[0][derivativeIndex][day][DerivativeDataClass::Execution] << 
-                   "  Deriv Accumulation Value " << derivativeData[0][derivativeIndex][day][DerivativeDataClass::Accumulation] << 
-                   "  Deriv Present Value " << derivativeData[0][derivativeIndex][day][DerivativeDataClass::Total] << "\n";
+               std::cout << "Day " << day << "  Asset Price " << *assetData[simIndex][day][AssetDataClass::Price]._Cast<double>() <<
+                   "  Deriv Execution Value " << derivativeData[simIndex][0][day][DerivativeDataClass::Execution] <<
+                   "  Deriv Accumulation Value " << derivativeData[simIndex][0][day][DerivativeDataClass::Accumulation] <<
+                   "  Deriv Present Value " << derivativeData[simIndex][0][day][DerivativeDataClass::Total] << "\n";
         }
     }
 }
